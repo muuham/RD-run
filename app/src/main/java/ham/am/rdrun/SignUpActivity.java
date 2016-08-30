@@ -1,5 +1,7 @@
 package ham.am.rdrun;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -51,6 +53,24 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
 
+                switch (checkedId) {
+                    case R.id.radioButton:
+                        avataString = "0";
+                        break;
+                    case R.id.radioButton2:
+                        avataString = "1";
+                        break;
+                    case R.id.radioButton3:
+                        avataString = "2";
+                        break;
+                    case R.id.radioButton4:
+                        avataString = "3";
+                        break;
+                    case R.id.radioButton5:
+                        avataString = "4";
+                        break;
+                }
+
             }
         });
 
@@ -80,7 +100,22 @@ public class SignUpActivity extends AppCompatActivity {
             MyAlert myAlert = new MyAlert();
             //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK)
             //เรียก Method MyDialog
-            myAlert.MyDialog(this, R.drawable.nobita48, "มีช่องว่าง", "กรุณากรอกทุกช่องค่ะ");
+            myAlert.MyDialog(this, R.drawable.doremon48, "มีช่องว่าง", "กรุณากรอกทุกช่องค่ะ");
+
+            //คลิกที่ checkChoose() กด alt + Enter จะสร้าง Method ให้อัตโนมัติ
+        } else if (checkChoose()) {
+
+            //true => Have Choose
+            confirmValue();
+
+        } else {
+
+            //false => No Choose
+            //เรียก class myAlert
+            MyAlert myAlert = new MyAlert();
+            //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK)
+            //เรียก Method MyDialog
+            myAlert.MyDialog(this, R.drawable.nobita48, "ยังไม่เลือก Avatar", "กรุณากรอกเลือก Avatar ก่อน");
 
         }
 
@@ -100,6 +135,63 @@ public class SignUpActivity extends AppCompatActivity {
         //return ค่า result กลับไป
         return result;
     }
+
+    private boolean checkChoose() {
+
+        //กำหนดค่าเริ่มต้นของ result
+        boolean result = false;
+
+        //ตรวจสอบแล้วถูก return true
+        if (avata1RadioButton.isChecked() ||
+                avata2RadioButton.isChecked() ||
+                avata3RadioButton.isChecked() ||
+                avata4RadioButton.isChecked() ||
+                avata5RadioButton.isChecked()) {
+            result = true;
+        }
+
+        //return ค่า result กลับไป
+        return result;
+
+    } //checkChoose
+
+    private void confirmValue() {
+
+        //รับค่าจากที่เลือก Avatar มาเก็บไว้
+        MyConstant myConstant = new MyConstant();
+        int[] avataInts = myConstant.getAvatarInts();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        //แสดงรูปที่เลือก ตามการเลือกจากหน้าจอ
+        builder.setIcon(avataInts[Integer.parseInt(avataString)]);
+        builder.setTitle("โปรดตรวจสอบข้อมูล");
+        builder.setMessage("Name = " + nameString + "\n" +
+                "Surname = " + surnameString + "\n" +
+                "User = " + userString + "\n" +
+                "Password = " + passwordString);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                uploadValueToServer();
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    } //confirmValue
+
+    private void uploadValueToServer() {
+
+
+
+    }//uploadValueToServer
 
 
 } //Main Class
