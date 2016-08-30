@@ -227,7 +227,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Response response) throws IOException {
-finish();
+                finish();
             }
         });
 
