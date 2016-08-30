@@ -18,7 +18,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText nameEditText, surnameEditText, userEditText, passwordEditText;
     private RadioGroup radioGroup;
     private RadioButton avata1RadioButton, avata2RadioButton, avata3RadioButton, avata4RadioButton, avata5RadioButton;
-
+    private String nameString, surnameString, userString, passwordString, avataString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,46 @@ public class SignUpActivity extends AppCompatActivity {
     //กำหนดให้มีการมองเห็น โดยใช้ View
     public void clickSignUpSign(View view){
 
+        //รับค่ามา
+        //change data ให้เป็น String
+        //Get Value From EditText
+        //trim ตัดช่องว่างออกให้อัตโนมัตื
+        nameString = nameEditText.getText().toString().trim();
+        surnameString = surnameEditText.getText().toString().trim();
+        userString = userEditText.getText().toString().trim();
+        passwordString = passwordEditText.getText().toString().trim();
+
+        //check space ตรวจสอบช่องว่าง
+        //เช็คจาก Methed checkSpace()
+        //คลิกที่ checkSpace() กด alt + Enter จะสร้าง Method ให้อัตโนมัติ
+        if (checkSpace()) {
+
+            //เมื่อไหร่ก็ตามสิ่งที่อยู่ใน if เป็นจริงจะเข้ามาทำงานในนี้
+            //True
+            //เรียก class myAlert
+            MyAlert myAlert = new MyAlert();
+            //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK Cancel)
+            //เรียก Method MyDialog
+            myAlert.MyDialog(this, R.drawable.nobita48, "มีช่องว่าง", "กรุณากรอกทุกช่องค่ะ");
+
+        }
+
     } //clickSignUpSign
+
+    //return ค่ากลับไปเป็น boolean
+    private boolean checkSpace() {
+
+        //กำหนดค่าเริ่มต้นของ result
+        boolean result = false;
+
+        //ตรวจสอบแล้วถูก return true
+        if (nameString.equals("") || surnameString.equals("") || userString.equals("") || passwordString.equals("")) {
+            result = true;
+        }
+
+        //return ค่า result กลับไป
+        return result;
+    }
+
 
 } //Main Class
