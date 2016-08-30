@@ -46,6 +46,14 @@ public class SignUpActivity extends AppCompatActivity {
         avata4RadioButton = (RadioButton) findViewById(R.id.radioButton4);
         avata5RadioButton = (RadioButton) findViewById(R.id.radioButton5);
 
+        //Radio Controller
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+            }
+        });
+
     } //Main Method
 
     //ไม่มีการ return ค่ากลับ
@@ -70,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
             //True
             //เรียก class myAlert
             MyAlert myAlert = new MyAlert();
-            //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK Cancel)
+            //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK)
             //เรียก Method MyDialog
             myAlert.MyDialog(this, R.drawable.nobita48, "มีช่องว่าง", "กรุณากรอกทุกช่องค่ะ");
 

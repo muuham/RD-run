@@ -10,7 +10,7 @@ import android.content.DialogInterface;
 public class MyAlert {
 
     //Method ที่มีการใช้ อากิวเมนต์
-    //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK Cancel)
+    //Alert ประกอบด้วย icon(รูปภาพ) Title Message ปุ่ม(OK)
     public void MyDialog(Context context,int intIcon, String strTitle, String strMessage) {
         //เลือก AlertDialog ของ Android.app
         //ทำการต่อท่อ ตัวแปร ต้องชื่อเดียวกันกับข้างบนนะ
