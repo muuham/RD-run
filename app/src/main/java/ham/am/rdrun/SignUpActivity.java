@@ -9,10 +9,22 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+
+import okio.BufferedSink;
+
 public class SignUpActivity extends AppCompatActivity {
 
-    //ประกาศตัวแปร  เพื่อพร้อมใช้งาน
-    //ตัวแปร ประกอบด้วย 3 ส่วน access type name
+    //ประกาศตัวแปร  เพื่อพร้อมใช้งาน  ตัวแปร ประกอบด้วย 3 ส่วน access type name
     //access การเข้าถึง จะเป็น Public(ใช้ได้หมด) Private(ใช้เฉพาะ)
     //type ชนิดของตัวแปร เช่น ตัวเลข ข้อความ(EditText)
     //name ชื่อของตัวแปร
@@ -21,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton avata1RadioButton, avata2RadioButton, avata3RadioButton, avata4RadioButton, avata5RadioButton;
     private String nameString, surnameString, userString, passwordString, avataString;
+    private static final String urlPHP = "http://swiftcodingthai.com/rd/add_user_droid.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +202,34 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void uploadValueToServer() {
 
+        //โยน String ทั้งหมดขึ้นไป
+        OkHttpClient okHttpClient = new OkHttpClient();
+        //กำหนดค่า isAdd เพื่อใช้ใน add_user_droid.php
+        //ตัวที่เป็น ชื่อ ต้องเหมือนกับในไฟล์ PHP นะ
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("Name", nameString)
+                .add("Surname", surnameString)
+                .add("User", userString)
+                .add("Password", passwordString)
+                .add("Svata", avataString)
+                .build();
+        Request.Builder builder = new Request.Builder();
+        //เมื่อไปที่ URL ให้ส่ง requestBody ไปด้วย
+        Request request = builder.url(urlPHP).post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        //ถ้าส่งไม่ได้ ให้ call อีก
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
 
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+finish();
+            }
+        });
 
     }//uploadValueToServer
 
