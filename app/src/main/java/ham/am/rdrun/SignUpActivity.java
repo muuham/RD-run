@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -141,7 +142,10 @@ public class SignUpActivity extends AppCompatActivity {
         boolean result = false;
 
         //ตรวจสอบแล้วถูก return true
-        if (nameString.equals("") || surnameString.equals("") || userString.equals("") || passwordString.equals("")) {
+        if (nameString.equals("") ||
+                surnameString.equals("") ||
+                userString.equals("") ||
+                passwordString.equals("")) {
             result = true;
         }
 
@@ -205,14 +209,14 @@ public class SignUpActivity extends AppCompatActivity {
         //โยน String ทั้งหมดขึ้นไป
         OkHttpClient okHttpClient = new OkHttpClient();
         //กำหนดค่า isAdd เพื่อใช้ใน add_user_droid.php
-        //ตัวที่เป็น ชื่อ ต้องเหมือนกับในไฟล์ PHP นะ
+        //ตัวที่เป็น ชื่อ ต้องเหมือนกับในไฟล์ PHP นะ เช่น $_POST['isAdd']
         RequestBody requestBody = new FormEncodingBuilder()
                 .add("isAdd", "true")
                 .add("Name", nameString)
                 .add("Surname", surnameString)
                 .add("User", userString)
                 .add("Password", passwordString)
-                .add("Svata", avataString)
+                .add("Avata", avataString)
                 .build();
         Request.Builder builder = new Request.Builder();
         //เมื่อไปที่ URL ให้ส่ง requestBody ไปด้วย
@@ -227,6 +231,8 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Response response) throws IOException {
+                //แสดงค่าของ response ที่อยู่ในไฟล์ PHP
+                Log.d("31AugV1", "Result ==> " + response.body().string());
                 finish();
             }
         });
