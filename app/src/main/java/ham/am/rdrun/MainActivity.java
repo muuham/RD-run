@@ -10,11 +10,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,8 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
         //Explicit
         private Context context;
-        private String myUserString, myPasswordString;
+        private String myUserString, myPasswordString , truePasswordString, nameString, surnameString, idString;
         private final String urlJSON = "http://swiftcodingthai.com/rd/get_user_master.php";
+        private boolean statusABoolean = true;
 
         //สร้าง constructor ทำหน้าที่ในดึงข้อมูลจาก JSON ขึ้นมา
         //constructor ชื่อเดียวกันกับ class
@@ -80,7 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             } catch (Exception e) {
-                //หาก Error หรือเนตหลุด URL ผิด จะเข้ามาทำในนี้
+                //Error
+                //หรือเนตหลุด URL ผิด จะเข้ามาทำในนี้
                 Log.d("31AugV2", "e doInBackground => " + e.toString());
                 return null;
             }
@@ -96,6 +102,50 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             Log.d("31AugV2", "JSON => " + s);
+
+            try {
+
+                //รับ parameter จาก doInBackground
+                JSONArray jsonArray = new JSONArray(s);
+
+                //วนลูปเก็บ
+                for (int i=0; i<jsonArray.length(); i+=1) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    //ถ้า User = User ใน jsonObject (ที่ได้มาจาก DB)
+                    if (myUserString.equals(jsonObject.getString("User"))) {
+                        statusABoolean = false;
+                        truePasswordString = jsonObject.getString("Password");
+                        nameString = jsonObject.getString("Name");
+                        surnameString = jsonObject.getString("Surname");
+                        idString = jsonObject.getString("id");
+                    } //if
+                } //for
+
+                if (statusABoolean) {
+                    //statusABoolean = true
+                    //User false ไม่มี User นี้ในฐานข้อมูล
+                    MyAlert myAlert = new MyAlert();
+                    myAlert.MyDialog(context, R.drawable.kon48, "แจ้งเตือน", "ไม่มี" + myUserString + "ในฐานข้อมูล");
+                } else if (myPasswordString.equals(truePasswordString)) {
+                    //statusABoolean = false <= ถูก
+                    //ตรวจสอบ password ต่อ
+                    //password = true <= ถูก
+                    Toast.makeText(context, "welcome คุณ " + nameString + " " + surnameString,
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+                    //statusABoolean = false <= ถูก
+                    //password = false <= ผิด
+                    MyAlert myAlert = new MyAlert();
+                    myAlert.MyDialog(context,R.drawable.bird48, "แจ้งเตือน", "พาสเวิคไม่ถูกต้อง");
+                }
+
+            } catch (Exception e) {
+                //Error
+                //หรือ JSON ไม่อยู่ในรูปแบบมาตรฐาน
+                Log.d("31AugV3", "e onPostExecute => " + e.toString());
+            }
 
         }//onPost
     }
