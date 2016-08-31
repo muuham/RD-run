@@ -13,6 +13,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }   // Main Method
 
+    public void clickSignInMain(View view) {
+
+        //ให้ทำการดึงข้อมูล จาก ฐานข้อมูล ขึ้นมา
+
+
+    }//clickSignInMain
+
     //Get Event from Click Button
     //1.void ดำเนินการอะไรก็ตาม โดยไม่แจ้งผลกลับ
     //2.สร้างตัวแปร view ด้วยการ Ctrl + Space
