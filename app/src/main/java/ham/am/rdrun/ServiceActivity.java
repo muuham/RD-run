@@ -82,6 +82,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
     }// Main Method onCreate
 
+    //alt + Insert เลือก Override Method.. เลือก onResume
     //หลังจากแอพหยุด แล้วกลับมาใช้ใหม่ ให้ทำ <= resume
     @Override
     protected void onResume() {
@@ -124,6 +125,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         locationManager.removeUpdates(locationListener);
     }//onStop
 
+    /////////////////////////////////////////////////////////////////////////////////
     //ให้แอพหยุดชัวคราว  กรณีที่มีโทรศัพท์เข้า  หรือ เปลี่ยนไปเล่นแอพอื่น <= pause
     //หยุดการทำงาน
     @Override
@@ -132,6 +134,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         //หยุดการค้นหา location
         locationManager.removeUpdates(locationListener);
     }
+    /////////////////////////////////////////////////////////////////////////////////
 
     public Location myFindLocation(String strProvider) {
         //หา Location จาก การ์ด(GPS) หรือ ISP
