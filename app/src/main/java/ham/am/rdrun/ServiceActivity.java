@@ -136,6 +136,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     }
     /////////////////////////////////////////////////////////////////////////////////
 
+
     public Location myFindLocation(String strProvider) {
         //หา Location จาก การ์ด(GPS) หรือ ISP
 
