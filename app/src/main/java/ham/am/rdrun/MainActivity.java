@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
                     MyAlert myAlert = new MyAlert();
                     myAlert.MyDialog(context, R.drawable.kon48, "แจ้งเตือน", "ไม่มี" + myUserString + "ในฐานข้อมูล");
                 } else if (myPasswordString.equals(truePasswordString)) {
+
+                    Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
+                    startActivity(intent);
+
                     //statusABoolean = false <= ถูก
                     //ตรวจสอบ password ต่อ
                     //password = true <= ถูก
