@@ -38,6 +38,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         nameString = getIntent().getStringExtra("Name");
         surnameString = getIntent().getStringExtra("Surname");
 
+
         //แสดงค่า Show Text
         //กำหนดให้ nameTextView = ค่าจาก Intent
         nameTextView.setText(nameString);
