@@ -20,6 +20,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private ImageView imageView;
     private TextView nameTextView, surnameTextView;
     private int[] avataInts;
+    private double userLatADouble = 13.8063773, userLngADouble = 100.5754295;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +72,12 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //Set up Center Map
+        //กำหนด ค่า private double userLatADouble = 13.8063773, userLngADouble = 100.5754295 ไว้
+        LatLng latLng = new LatLng(userLatADouble, userLngADouble);
+        //Zoom 16 เท่า
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
+
+
     }//Method onMapReady
 }//Main Class ServiceActivity
