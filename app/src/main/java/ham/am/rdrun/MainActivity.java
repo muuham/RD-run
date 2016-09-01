@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Explicit
         private Context context;
-        private String myUserString, myPasswordString , truePasswordString, nameString, surnameString, idString;
+        private String myUserString, myPasswordString , truePasswordString, nameString, surnameString, idString, avataString;
         private final String urlJSON = "http://swiftcodingthai.com/rd/get_user_master.php";
         private boolean statusABoolean = true;
 
@@ -119,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                         nameString = jsonObject.getString("Name");
                         surnameString = jsonObject.getString("Surname");
                         idString = jsonObject.getString("id");
+                        avataString = jsonObject.getString("Avata");
+
                     } //if
                 } //for
 
@@ -130,7 +132,18 @@ public class MainActivity extends AppCompatActivity {
                 } else if (myPasswordString.equals(truePasswordString)) {
 
                     Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
+
+                    //ส่งค่าที่รับจาก DB แนบไปกับการ Intent
+                    //ดูตัวแปรที่ if (myUserString.equals(jsonObject.getString("User"))) {
+                    //intent.putExtra("id", idString); => id ชื่อตัวแปรที่ส่งไป idString ค่าที่ส่งไป
+                    intent.putExtra("id", idString);
+                    intent.putExtra("Avata", avataString);
+                    intent.putExtra("Name", nameString);
+                    intent.putExtra("Surname", surnameString);
+                    //โยนไปที่ ServiceActivity
                     startActivity(intent);
+
+
 
                     //statusABoolean = false <= ถูก
                     //ตรวจสอบ password ต่อ
