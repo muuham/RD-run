@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -101,6 +102,23 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }// Main Method onCreate
+
+    //ผูกปุ่ม
+    public void clickNormal(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    }
+
+    public void clickSatellite(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+    }
+
+    public void clickTerrain(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+    }
+
+    public void clickHybrid(View view) {
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+    }
 
     //refresh Data
     //Void, Void, String <= ก่อนโหลด และระหว่างโหลด ไม่ต้องทำอะไร  หลังโหลด ให้แสดงค่าออกมา
