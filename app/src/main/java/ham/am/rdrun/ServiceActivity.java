@@ -171,7 +171,7 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
             //False
             Log.d("1SepV1", "Cannot Find Location");
         }
-
+        Log.d("1SepV3", "location = " + location);
         return location;
     }
 
