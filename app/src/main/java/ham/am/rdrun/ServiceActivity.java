@@ -20,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -49,6 +50,8 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private Criteria criteria;
     //urlPHP
     private static final String urlPHP = "http://swiftcodingthai.com/rd/edit_location_droid.php";
+    //เมื่อคลิกที่รูป Avatar ให้หยุด (Marker)
+    private boolean statusABoolean = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +116,6 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         private String[] nameStrings, surnameStrings;
         private int[] avataInts;
         private double[] latDoubles, lngDoubles;
-
 
         //setter
         //alt + insert -> Constructor... -> เลือก 2 รายการ  เลือก context ก่อนนะ
@@ -186,6 +188,15 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
                     Log.d("2SepV3", "lat = " + i + " => " + latDoubles[i] + "lng = " + i + " => " + lngDoubles[i]);
                     Log.d("2SepV3", "--------------------------------------------------");
                 }//for
+
+            //คลิกที่ Marker กำหนด statusABoolean = false
+            googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                @Override
+                public void onMapLongClick(LatLng latLng) {
+                    statusABoolean = !statusABoolean;
+                    Log.d("2SepV4", "Status => " + statusABoolean);
+                }
+            });
 
 
             } catch (Exception e) {
@@ -354,8 +365,10 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         //Marker
         //Read
         //กด alt + Enter เลือก create Method
-        createMarker();
-
+        //statusABoolean = true ให้ทำการสร้าง Marker
+        if (statusABoolean) {
+            createMarker();
+        }
 
         //Post Delay
         //ใช้ของ android.os
