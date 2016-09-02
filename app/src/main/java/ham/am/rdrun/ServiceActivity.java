@@ -19,6 +19,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
 
 public class ServiceActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -28,10 +37,13 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private ImageView imageView;
     private TextView nameTextView, surnameTextView;
     private int[] avataInts;
+    //ละติจูด ลองติจูด
     private double userLatADouble = 13.8063773, userLngADouble=100.5754295;
     private LocationManager locationManager;
     //แกน x,y,z
     private Criteria criteria;
+    //urlPHP
+    private static final String urlPHP = "http://swiftcodingthai.com/rd/edit_location_droid.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +235,10 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         Log.d("1SepV2", "Lat = " + userLatADouble);
         Log.d("1SepV2", "Lng = " + userLngADouble);
 
+        // Update
+        //โยนค่าเข้า DB ตาม user ที่ login
+        editLatLngOnServer();
+
         //Post Delay
         //ใช้ของ android.os
         Handler handler = new Handler();
@@ -235,6 +251,37 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         },1000);
 
     }//myLoop
+
+    private void editLatLngOnServer() {
+
+        //ใช้ของ com.squareup.okhttp
+        OkHttpClient okHttpClient = new OkHttpClient();
+        //มัดข้อมูลให้เป็นก้อน เรียงต่อกัน <= Package
+        //FormEncodingBuilder() <= พิมพ์ Fo แล้วกด Ctrl + Space
+        RequestBody requestBody = new FormEncodingBuilder()
+                .add("isAdd", "true")
+                .add("id", idString)
+                .add("Lat", Double.toString(userLatADouble))
+                .add("Lng", Double.toString(userLngADouble))
+                .build();
+        Request.Builder builder = new Request.Builder();
+        //เซต urlPHP ที่จะใช้
+        Request request = builder.url(urlPHP).post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+        @Override
+        public void onFailure(Request request, IOException e) {
+            //กรณีที่ไม่สามารถทำงานได้
+            Log.d("2SepV1", "e => " + e.toString());
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            //กรณีที่ Update DB ได้
+            Log.d("2SepV1", "result => " + response.body().string());
+        }
+    }); //call.enqueue
+    }//editLatLngOnServer
 
 
 }//Main Class ServiceActivity
