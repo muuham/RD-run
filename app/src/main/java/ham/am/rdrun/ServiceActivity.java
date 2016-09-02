@@ -5,6 +5,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -94,6 +95,61 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
     }// Main Method onCreate
 
+    //refresh Data
+    //Void, Void, String <= ก่อนโหลด และระหว่างโหลด ไม่ต้องทำอะไร  หลังโหลด ให้แสดงค่าออกมา
+    //กด shift + ctrl + Enter
+    //กด alt + Enter -> implement Method -> doInBackground
+    private class SynAllUser extends AsyncTask<Void, Void, String> {
+
+        //Explicit
+        private Context context;
+        private GoogleMap googleMap; //สำหรับปัก Marker
+        private static final String urlJSON = "http://swiftcodingthai.com/rd/get_user_master.php";
+
+        //setter
+        //alt + insert -> Constructor... -> เลือก 2 รายการ  เลือก context ก่อนนะ
+        public SynAllUser (Context context, GoogleMap googleMap) {
+            this.context = context;
+            this.googleMap = googleMap;
+        }//Constructor SynAllUser
+
+        //ให้ทำการ โหลดข้อมูลมาจาก urlJSON
+        //ดึงข้อมูลจากฐานมา
+        //อ่านทุกๆ 1 วินาที
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            try {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(urlJSON).build();
+                Response response = okHttpClient.newCall(request).execute();
+                return response.body().string();
+
+            } catch (Exception e) {
+                //Error
+                Log.d("2SepV2", "SynAllUser = e doInBackground => " + e.toString());
+                return null;
+            }
+
+            //return null;
+        }//doInBackground
+
+        //alt + insert -> Override Method... -> onPostExecute
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("2SepV2", "SynAllUser = JSON onPostExecute => " + s);
+
+        }//onPostExecute
+
+
+
+
+    }//synAllUser
+
+
     //alt + Insert เลือก Override Method.. เลือก onResume
     //หลังจากแอพหยุด แล้วกลับมาใช้ใหม่ ให้ทำ <= resume
     @Override
@@ -169,11 +225,11 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         } else {
 
             //False
-            Log.d("1SepV1", "Cannot Find Location");
+            Log.d("1SepV1", "myFindLocation = Cannot Find Location");
         }
-        Log.d("1SepV3", "location = " + location);
+        Log.d("1SepV3", "myFindLocation = location => " + location);
         return location;
-    }
+    }//myFindLocation
 
 
     public LocationListener locationListener = new LocationListener() {
@@ -232,12 +288,19 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
     private void myLoop() {
 
         //To do
-        Log.d("1SepV2", "Lat = " + userLatADouble);
-        Log.d("1SepV2", "Lng = " + userLngADouble);
+        Log.d("1SepV2", "myLoop = Lat => " + userLatADouble);
+        Log.d("1SepV2", "myLoop = Lng => " + userLngADouble);
 
         // Update
         //โยนค่าเข้า DB ตาม user ที่ login
+        //กด alt + Enter เลือก create Method
         editLatLngOnServer();
+
+        //Marker
+        //Read
+        //กด alt + Enter เลือก create Method
+        createMarker();
+
 
         //Post Delay
         //ใช้ของ android.os
@@ -251,6 +314,14 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         },1000);
 
     }//myLoop
+
+    private void createMarker() {
+
+        SynAllUser synAllUser = new SynAllUser(this, mMap);
+        synAllUser.execute();
+
+    }//createMarker
+
 
     private void editLatLngOnServer() {
 
@@ -272,13 +343,13 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         @Override
         public void onFailure(Request request, IOException e) {
             //กรณีที่ไม่สามารถทำงานได้
-            Log.d("2SepV1", "e => " + e.toString());
+            Log.d("2SepV1", "editLatLngOnServer = e onFailure => " + e.toString());
         }
 
         @Override
         public void onResponse(Response response) throws IOException {
             //กรณีที่ Update DB ได้
-            Log.d("2SepV1", "result => " + response.body().string());
+            Log.d("2SepV1", "editLatLngOnServer = result onResponse => " + response.body().string());
         }
     }); //call.enqueue
     }//editLatLngOnServer
