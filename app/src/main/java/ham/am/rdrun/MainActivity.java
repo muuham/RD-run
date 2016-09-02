@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText userEditText, passwordEditText;
     private String userString, passwordString;
 
+    //check box
+    private CheckBox checkBox;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
         imageView = (ImageView) findViewById(R.id.imageView6);
         userEditText = (EditText) findViewById(R.id.editText5);
         passwordEditText =  (EditText) findViewById(R.id.editText6);
+
+        //check box
+        checkBox = (CheckBox) findViewById(R.id.checkbox);
 
         //Load Image แสดงรูปจาก URL
         Picasso.with(this)
@@ -130,6 +137,11 @@ public class MainActivity extends AppCompatActivity {
                     MyAlert myAlert = new MyAlert();
                     myAlert.MyDialog(context, R.drawable.kon48, "แจ้งเตือน", "ไม่มี" + myUserString + "ในฐานข้อมูล");
                 } else if (myPasswordString.equals(truePasswordString)) {
+                    //Password True
+                    //เช็คว่ามีการติ๊ก checkBox หรือไม่
+                    if (checkBox.isChecked()) {
+                        Log.d("2SepV5", "checkBox is Checked ");
+                    }
 
                     Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
 
