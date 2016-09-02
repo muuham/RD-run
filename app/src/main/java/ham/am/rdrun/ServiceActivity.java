@@ -28,6 +28,9 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 public class ServiceActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -105,6 +108,11 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         private Context context;
         private GoogleMap googleMap; //สำหรับปัก Marker
         private static final String urlJSON = "http://swiftcodingthai.com/rd/get_user_master.php";
+        //ประกาศตัวแปร เพื่อดึงค่าออกมาจาก JSON
+        private String[] nameStrings, surnameStrings;
+        private int[] avataInts;
+        private double[] latDoubles, lngDoubles;
+
 
         //setter
         //alt + insert -> Constructor... -> เลือก 2 รายการ  เลือก context ก่อนนะ
@@ -139,6 +147,40 @@ public class ServiceActivity extends FragmentActivity implements OnMapReadyCallb
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            //เอา Data ออกมา
+            try {
+                //จองพื้นที่ Array
+                JSONArray jsonArray = new JSONArray(s);
+                //จองหน่วยความจำ ตามจำนวน record ใน table
+                nameStrings = new String[jsonArray.length()];
+                surnameStrings = new String[jsonArray.length()];
+                avataInts = new int[jsonArray.length()];
+                latDoubles = new double[jsonArray.length()];
+                lngDoubles = new double[jsonArray.length()];
+
+                for (int i=0; i<jsonArray.length(); i++) {
+                    //ดึงข้อมูลออกมา
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    nameStrings[i] = jsonObject.getString("Name");
+                    surnameStrings[i] = jsonObject.getString("Surname");
+                    avataInts[i] = Integer.parseInt(jsonObject.getString("Avata"));
+                    latDoubles[i] = Double.parseDouble(jsonObject.getString("Lat"));
+                    lngDoubles[i] = Double.parseDouble(jsonObject.getString("Lng"));
+
+                    //Create Marker
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(latDoubles[i], lngDoubles[i]))
+                    );
+                }//for
+
+
+            } catch (Exception e) {
+
+                //Error
+                Log.d("2SepV3", "synAllUser = e onPostExecute => " + e.toString());
+
+            }
 
             Log.d("2SepV2", "SynAllUser = JSON onPostExecute => " + s);
 
