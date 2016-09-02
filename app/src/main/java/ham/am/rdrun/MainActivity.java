@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         passwordEditText =  (EditText) findViewById(R.id.editText6);
 
         //check box
-        checkBox = (CheckBox) findViewById(R.id.checkbox);
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
 
         //Load Image แสดงรูปจาก URL
         Picasso.with(this)
@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
                     //เช็คว่ามีการติ๊ก checkBox หรือไม่
                     if (checkBox.isChecked()) {
                         Log.d("2SepV5", "checkBox is Checked ");
+
+                        MyManage myManage = new MyManage(context);
                     }
 
                     Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
